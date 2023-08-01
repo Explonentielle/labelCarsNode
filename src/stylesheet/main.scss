@@ -1,0 +1,51 @@
+@import "mixins";
+@import "reset";
+@import "header";
+@import "formulaire";
+
+
+
+body{
+    background: #101010;
+    color: white;
+}
+
+.carsList {
+    display: flex;
+    flex-direction: column;
+    margin: 6rem;
+
+
+    @media (max-width: 768px) {
+        margin: 2rem;
+      }
+}
+
+
+.carContainer {
+    border-radius: 5rem;
+    margin: 3rem 0;
+    border: solid 1px rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .buttonContainer {
+        display: flex;
+        flex-direction: column;
+        margin: 0 3rem;
+    }
+
+    img {
+        width: 15%;
+    }
+
+    
+    .options {
+        display: flex;
+
+        img{
+            margin: 1rem;
+        }
+    }
+}

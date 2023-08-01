@@ -1,0 +1,74 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    margin: 1vw;
+    align-items: center;
+    .columnContainer{
+        display: flex;
+        justify-content: center;
+
+        @media (max-width: 764px) {
+            justify-content: space-between;
+        }
+        
+        
+        .firstColumn, .scndColumn{
+            margin:0 5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            @media (max-width: 764px) {
+                margin:0 1rem 0 0 ;
+            }
+
+            .checkBoxContainer{
+                display: flex;
+                flex-direction: column;
+                @media (max-width: 764px) {
+                    flex-direction: row;
+                }
+            }
+
+            .select {
+                width: 100%;
+            }
+        }
+    
+    }
+
+    label {
+        margin-bottom: 8px;
+
+
+    }
+
+    input,
+    select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 16px;
+    }
+
+    .submit {
+        max-width: 100px;
+        padding: 8px 16px;
+        background-color: #1890ff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
+
+
+
+
+.form .submit:hover {
+    background-color: #40a9ff;
+}
+
+.form .submit:focus {
+    outline: none;
+}
