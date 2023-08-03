@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Car from './Car';
+import { useNavigate } from 'react-router-dom';
+
 
 const Container = () => {
   const [carsList, setCarsList] = useState([]);
+  const navigate = useNavigate()
 
   const getCars = async () => {
     const response = await fetch('http://localhost:5500/cars')
@@ -10,12 +13,13 @@ const Container = () => {
     setCarsList(response);
   }
 
+
   useEffect(() => {
     getCars();
   }, []);
 
+
   const deleteCar = async (id, index) => {
-    console.log(id)
     try {
       const response = await fetch(`http://localhost:5500/cars/${id}`, {
         method: 'DELETE',
@@ -31,6 +35,10 @@ const Container = () => {
     } catch (error) {
       console.error('Erreur lors de la suppression de la voiture:', error);
     }
+  };
+
+  const modifCar = (car) => {
+    navigate("/add", {state: car})
   };
 
 
@@ -50,6 +58,7 @@ const Container = () => {
           transmission={car.options.transmission}
           person={car.options.person}
           action={deleteCar}
+          modif={() => modifCar(car)}
         />
       ))}
     </div>

@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import React from 'react'
 
-const Car = ({ image, name, index, _id, aircondition, transmission, person, navigation, action }) => {
+const Car = ({ image, name, index, _id, aircondition, transmission, person, navigation, action, modif }) => {
 
   return (
     <div className='carContainer'>
@@ -22,7 +22,7 @@ const Car = ({ image, name, index, _id, aircondition, transmission, person, navi
         ) : null}
       </div>
       <div className='buttonContainer'>
-      <Button className='button'  style={{ backgroundColor: '#60a5fa', borderColor: '#1890ff', margin: '1rem' }}>
+      <Button onClick={modif} className='button'  style={{ backgroundColor: '#60a5fa', borderColor: '#1890ff', margin: '1rem' }}>
         Modifier
       </Button>
 

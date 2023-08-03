@@ -1,96 +1,148 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../assets/Header'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const AddCars = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { state } = location
+
 
   const [data, setData] = useState({
     id: '',
     name: '',
     image: '',
-    price: 0,
-    reservations: 0,
+    price: null,
+    reservations: null,
     options: {
-      aircondition: null,
-      navigation: null,
-      transmission: 'manuel',
-      person: 0,
+      aircondition: false,
+      navigation: false,
+      transmission:null,
+      person: null,
     },
   });
+  
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    console.log({ name, value, type, checked })
-    setData((state) => ({
-      ...state,
-      ...(name === "aircondition" || name === "navigation" || name === "transmission" || name === "person"
-      ? { options: { ...state.options, [name]: value } }
-      : { [name]: value }
-    )
+  const addCar = async (values) => {
+    try {
+      const response = await fetch(`http://localhost:5500/cars`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values), 
+      });
+      if (!response) {
+        throw new Error('L ajout a échoué');
       }
-    ));
+      console.log('Voiture ajouté avec succès');
+    } catch (error) {
+      console.error('Erreur lors de l ajout de la voiture:', error);
+    }
   };
 
-  const handleSubmit = (e) => {
-    console.log(data)
-    e.preventDefault();
+
+  const modifCar = async (values) => {
+    try {
+      const response = await fetch(`http://localhost:5500/cars`, {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values), 
+      });
+      if (!response) {
+        throw new Error('L ajout a échoué');
+      }
+      console.log('Voiture ajouté avec succès');
+    } catch (error) {
+      console.error('Erreur lors de l ajout de la voiture:', error);
+    }
   };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const values = { ...data };
+    formData.forEach((value, name) => {
+      if (name === "aircondition" || name === "navigation" || name === "transmission" || name === "person") {
+        values.options[name] = e.target[name].type === "checkbox" ? e.target[name].checked : value;
+      } else {
+        values[name] = value;
+      }
+    });
+    if (state) {
+      modifCar(values)
+    }
+    else {
+      addCar(values)
+    }
+    navigate("/")
+  };
+
+
+
+  useEffect(() => {
+    if(state) {
+      setData(state)
+    }
+  }, [])
+  
 
   return (
     <div>
       <Header />
-      <form  className='form'>
+      <form onSubmit={handleFormSubmit} className='form'>
         <div className='columnContainer'>
 
           <div className='firstColumn'>
             <label>ID: </label>
-            <input type="text" name="id" value={data.id} onChange={handleChange} />
+            <input type="text" name="id" defaultValue={data.id}  />
 
 
             <label name="name ">Nom:</label>
-            <input type="text" name="name" value={data.name} onChange={handleChange} />
+            <input type="text" name="name" defaultValue={data.name} />
 
 
             <label>Image:</label>
 
-            <input type="text" name="image" value={data.image} onChange={handleChange} />
+            <input type="text" name="image" defaultValue={data.image}    />
 
 
             <label>Prix:</label>
-            <input type="number" name="price" value={data.price} onChange={handleChange} />
+            <input type="number" name="price" defaultValue={data.price} />
 
 
             <label>Réservations:</label>
-            <input type="number" name="reservations" value={data.reservations} onChange={handleChange} />
+            <input type="number" name="reservations" defaultValue={data.reservations}    />
           </div>
 
 
           <div className='scndColumn' >
             <label> Nombre de personnes:</label>
-            <select className='select' name="person" value={data.options.person} onChange={handleChange}>
-              <option value={""}>Nombres de portes</option>
+            <select className='select' name="person" defaultValue={state ? state.options.person : data.options.person}  >
+              <option value={0}>Nombres de portes</option>
               <option value={3}>3 portes</option>
               <option value={5}>5 portes</option>
             </select>
 
             <label>Transmission: </label>
-            <select className='select' name="transmission" value={data.options.transmission} onChange={handleChange}>
+            <select className='select' name="transmission" defaultValue={state ? state.options.transmission : data.options.transmission} >
               <option value="manuel">Manuel</option>
               <option value="automatique">Automatique</option>
             </select>
 
             <div className='checkBoxContainer'>
               <label>Climatisation:</label>
-              <input type="checkbox" name="aircondition" checked={data.options.aircondition} onChange={handleChange} />
+              <input type="checkbox" name="aircondition" defaultChecked={data.options.aircondition}   />
 
               <label> Navigation:</label>
-              <input type="checkbox" name="navigation" checked={data.options.navigation} onChange={handleChange} />
+              <input type="checkbox" name="navigation" defaultChecked={data.options.navigation} />
             </div>
-
           </div>
-
         </div>
 
-        <input onClick={handleSubmit} value={"Valider"} className="submit" type="submit"/>
+        <input value={"Valider"} className="submit" type="submit"/>
       </form>
     </div>
   )
